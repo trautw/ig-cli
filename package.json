@@ -1,0 +1,20 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "compile": "npx tsc",
+    "develop": "npx tsc -w",
+    "execute": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.26.39",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^13.1.8",
+    "dotenv": "^8.2.0",
+    "ig-api": "^0.15.0",
+    "tslint-config-airbnb": "^5.11.2"
+  }
+}
