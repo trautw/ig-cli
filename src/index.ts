@@ -1,25 +1,27 @@
-import * as ramda from 'ramda';
-
 const world = '🗺️';
 
 export function hello(word: string = world): string {
   return `Hello ${world}! `;
 }
 
+// tslint:disable-next-line: no-console
 console.log(hello());
 
+import * as env from './env';
+import * as igApi from './ig-api';
 
-import IG from 'ig-api';
-import getAccount from './env';
+// const moment = __importDefault(require('moment'));
+// moment.default();
 
-const account = getAccount(true);
+const account = env.default(true);
 
-const ig = new IG(account.apiKey, account.isDemo);
+const ig = new igApi.default(account.apiKey, account.isDemo);
 
 ig.login(account.username, account.password)
   // Response data is automatically
   // passed to the resolve callback
   .then((summary: any) => {
+    // tslint:disable-next-line: no-console
     console.log('summary:', summary)
     // Once logged in, use the shorthand
     // get(), post(), put() and delete()
@@ -37,5 +39,5 @@ ig.login(account.username, account.password)
   // Errors are automatically transformed
   // into a more user friendly format with
   // the response status and IG error code
-  .catch(console.error)
-
+  // tslint:disable-next-line: no-console
+  .catch(console.error);

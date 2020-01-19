@@ -1,5 +1,5 @@
-import { path, reduce } from 'rambda';
 import * as dotenv from 'dotenv';
+import { path, reduce } from 'rambda';
 
 dotenv.config();
 
@@ -13,7 +13,6 @@ export default function getAccount(isDemo: boolean) {
   return reduce((result: { [x: string]: any }, key: string) => {
     // console.log(`env.${prefix}_${constantCase(key)}`)
     result[key] = path(`env.${prefix}_${constantCase(key)}`, process)
-    return result
-  }, { isDemo }, keys)
+    return result;
+  },            { isDemo }, keys);
 }
-

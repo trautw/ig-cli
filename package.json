@@ -1,6 +1,7 @@
 {
   "license": "MIT",
   "scripts": {
+    "inst": "yarn install",
     "compile": "npx tsc",
     "develop": "npx tsc -w",
     "execute": "node dist/index.js"
@@ -13,8 +14,10 @@
   "dependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/node": "^13.1.8",
+    "axios": "^0.19.1",
     "dotenv": "^8.2.0",
     "ig-api": "^0.15.0",
+    "pidcrypt": "nikvdp/pidcrypt",
     "tslint-config-airbnb": "^5.11.2"
   }
 }
