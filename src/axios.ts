@@ -1,6 +1,6 @@
 // import { create as axios } from 'axios';
 // tslint:disable-next-line: import-name
-import Axios from 'axios';
+import Axios, { AxiosInstance } from 'axios';
 import { path } from 'rambda';
 
 const appToken = path('headers.x-security-token')
@@ -17,8 +17,10 @@ export function create(apiKey: string, isDemo: boolean) {
   })
 }
 
-export function setHeaderTokens(instance: { defaults: { 
-  headers: { [x: string]: unknown; CST: unknown; }; }; },
+// export function setHeaderTokens(instance: { defaults: { 
+//   headers: { [x: string]: unknown; CST: unknown; }; }; },
+//                                 response: any) {
+export function setHeaderTokens(instance: AxiosInstance,
                                 response: any) {
   instance.defaults.headers['X-SECURITY-TOKEN'] = appToken(response)
   instance.defaults.headers.CST = clientToken(response)

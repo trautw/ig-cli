@@ -1,3 +1,4 @@
+import { AxiosInstance } from 'axios';
 import { create, setHeaderTokens } from './axios';
 import {
   getOption,
@@ -13,7 +14,7 @@ export default class IG {
   private static transformResponse = transformResponse;
   private static transformError = transformError;
   private static uniqueId = uniqueId;
-  private api: any;
+  private api: AxiosInstance;
   private defaults: any;
 
   constructor(apiKey: string, isDemo: boolean, options?: any) {
@@ -42,14 +43,13 @@ export default class IG {
     return request;
   }
 
-  public get(path: string, version: number, params: null,
-             options: { transformResponse: (response: any) => unknown; }) {
+  public get(path: string, version?: number, params?: null,
+             options?: { transformResponse: (response: any) => unknown; }) {
     return this.request('get', path, version, { params }, options);
   }
 
   public post(path: string, version: number,
-              data: { encryptedPassword?: boolean; identifier: any; password: any; },
-              options: { transformResponse: boolean; }) {
+              data: any, options: any) {
     return this.request('post', path, version, { data }, options);
   }
 

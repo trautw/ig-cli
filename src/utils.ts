@@ -10,6 +10,7 @@ import {
 } from 'pidcrypt/pidcrypt_util';
 */
 // import 'pidcrypt/rsa';
+import { AxiosResponse } from 'axios';
 import {
   equals,
   path,
@@ -58,7 +59,7 @@ export function getOption(key: string, options: any, defaults: any) {
   return get(options, key, path(key, defaults));
 }
 
-export function transformResponse(response: any) {
+export function transformResponse(response: AxiosResponse): any {
   return path('data', response);
 }
 
