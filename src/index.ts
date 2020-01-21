@@ -70,9 +70,10 @@ function closeGold(size: number) {
   .catch(console.error);
 }
 
-function buy(epic: string, amount: number) {
+function buy(epic: string, size: number) {
   const data = {
     epic,
+    size,
     // tslint:disable-next-line: object-literal-sort-keys
     currencyCode: 'EUR',
     direction: 'BUY',
@@ -80,7 +81,6 @@ function buy(epic: string, amount: number) {
     forceOpen: 'true',
     guaranteedStop: false,
     orderType: 'MARKET',
-    size: amount,
     timeInForce: 'FILL_OR_KILL',
   };
   ig.post('positions/otc', 2, data)
