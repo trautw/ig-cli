@@ -25,15 +25,20 @@ export default class IG {
     },                            options);
   }
 
-  public request(method: string, path: any, version: any,
+  public request(method: string, path: string, version: any,
                  config: { params?: any; data?: any; }, options: any) {
     const transformRes = getOption('transformResponse', options, this.defaults);
     const transformErr = getOption('transformError', options, this.defaults);
+    const headers = { Version: version || 1, _method: method };
+    let realmethod = method;
+    if (method.valueOf() === 'delete'.valueOf()) {
+      realmethod = 'post';
+      headers._method = 'delete';
+    }
 
     let request = this.api.request(Object.assign({}, config, {
-      method,
-      // tslint:disable-next-line: object-literal-sort-keys
-      headers: { Version: version || 1 },
+      headers,
+      method: realmethod,
       url: path,
     }));
 
@@ -49,15 +54,15 @@ export default class IG {
   }
 
   public post(path: string, version: number,
-              data: any, options: any) {
+              data: any, options?: any) {
     return this.request('post', path, version, { data }, options);
   }
 
-  public put(path: any, version: any, data: any, options: any) {
+  public put(path: any, version: number, data: any, options?: any) {
     return this.request('put', path, version, { data }, options);
   }
 
-  public delete(path: string, version: number, data: null, options: any) {
+  public delete(path: string, version: number, data: any, options?: any) {
     return this.request('delete', path, version, { data }, options);
   }
 

@@ -9,7 +9,7 @@ const params = path('params');
 const data = path('data');
 const url = path('url');
 
-export default function createError({message, request, response, config }: any) {
+export default function createError({ message, request, response, config }: any) {
   const error = new Error(message);
   // tslint:disable-next-line: no-console
   console.log(`message: ${message}`);

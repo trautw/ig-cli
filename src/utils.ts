@@ -26,11 +26,11 @@ const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 // export const isFunction = pipe(type, equals('Function'))
 export function isFunction(f: any): boolean {
   return typeof(f) === 'function';
-};
+}
 // export const isUndefined = pipe(type, equals('Undefined'))
 export function isUndefined(f: any): boolean {
   return typeof(f) === 'undefined';
-};
+}
 
 // Require seedrandom.js first to increase randomness for stronger encryption
 // tslint:disable-next-line: no-var-requires

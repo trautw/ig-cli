@@ -3,8 +3,8 @@
 import Axios, { AxiosInstance } from 'axios';
 import { path } from 'rambda';
 
-const appToken = path('headers.x-security-token')
-const clientToken = path('headers.cst')
+const appToken = path('headers.x-security-token');
+const clientToken = path('headers.cst');
 
 export function create(apiKey: string, isDemo: boolean) {
   return Axios.create({
@@ -13,17 +13,14 @@ export function create(apiKey: string, isDemo: boolean) {
       Accept: 'application/json; charset=UTF-8',
       'Content-Type': 'application/json; charset=UTF-8',
       'X-IG-API-KEY': apiKey,
-    }
-  })
+    },
+  });
 }
 
-// export function setHeaderTokens(instance: { defaults: { 
-//   headers: { [x: string]: unknown; CST: unknown; }; }; },
-//                                 response: any) {
 export function setHeaderTokens(instance: AxiosInstance,
                                 response: any) {
-  instance.defaults.headers['X-SECURITY-TOKEN'] = appToken(response)
-  instance.defaults.headers.CST = clientToken(response)
+  instance.defaults.headers['X-SECURITY-TOKEN'] = appToken(response);
+  instance.defaults.headers.CST = clientToken(response);
 }
 
 export default create;
