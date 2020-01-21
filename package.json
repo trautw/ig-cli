@@ -4,12 +4,20 @@
     "inst": "yarn install",
     "compile": "npx tsc",
     "develop": "npx tsc -w",
-    "execute": "node dist/index.js"
+    "list_dax": "node dist/index.js --instrument=dax",
+    "list_dax_live": "node dist/index.js --instrument=dax --live=true",
+    "list_gold": "node dist/index.js --instrument=gold",
+    "buy_10_gold": "node dist/index.js --instrument=gold --action=buy --amount=10",
+    "close_gold": "node dist/index.js --instrument=gold --action=close",
+    "close_dax": "node dist/index.js --instrument=dax --action=close",
+    "execute": "node dist/index.js --ships=4"
   },
   "devDependencies": {
     "@types/ramda": "^0.26.39",
+    "@types/yargs": "^15.0.0",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.4",
+    "yargs": "^15.1.0"
   },
   "dependencies": {
     "@types/dotenv": "^8.2.0",

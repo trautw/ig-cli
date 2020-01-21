@@ -1,4 +1,10 @@
 // tslint:disable: no-console
+import * as yargs from 'yargs';
+// import { AxiosResponse } from 'axios';
+import * as env from './env';
+import * as igApi from './ig-api';
+import { transformResponse } from './utils';
+
 const world = '🗺️';
 
 export function hello(word: string = world): string {
@@ -7,20 +13,41 @@ export function hello(word: string = world): string {
 
 console.log(hello());
 
-import { AxiosResponse } from 'axios';
-import * as env from './env';
-import * as igApi from './ig-api';
-import { transformResponse } from './utils';
+const argv = yargs.options({
+  action: { choices: ['list', 'buy', 'close'], default: 'list' },
+  count: { type: 'count' },
+  instrument: { choices: ['dax', 'gold'], demandOption: true },
+  live: { type: 'boolean', default: false },
+  n: { type: 'number', alias: 'amount' },
+}).argv;
 
-function sellGold(amount: number) {
+const instr = argv.instrument;
+const action = argv.action;
+const amount = argv.count;
+
+const instrument = {
+  dax: 'IX.D.DAX.IFMM.IP',
+  gold: 'CS.D.CFEGOLD.CFE.IP',
+};
+
+let argepic = 'unknown';
+
+if (instr === 'gold') {
+  argepic = instrument.gold;
+}
+if (instr === 'dax') {
+  argepic = instrument.dax;
+}
+
+function closeGold(size: number) {
   const data = {
     direction: 'SELL',
-    epic: 'CS.D.CFEGOLD.CFE.IP', // Gold
+    epic: instrument.gold, // 'CS.D.CFEGOLD.CFE.IP', // Gold
     expiry: '-',
     level: null,
     orderType: 'MARKET',
     quoteId: null,
-    size: amount.toString(),
+    size: size.toString(),
     timeInForce: 'FILL_OR_KILL',
   };
   ig.delete('positions/otc', 1, data)
@@ -43,13 +70,12 @@ function sellGold(amount: number) {
   .catch(console.error);
 }
 
-function buyGold(amount: number) {
+function buy(epic: string, amount: number) {
   const data = {
-    // epic: 'IX.D.DAX.IFMM.IP', // DAX
-    // currencyCode: 'EUR',
+    epic,
+    // tslint:disable-next-line: object-literal-sort-keys
     currencyCode: 'EUR',
     direction: 'BUY',
-    epic: 'CS.D.CFEGOLD.CFE.IP', // Gold
     expiry: '-',
     forceOpen: 'true',
     guaranteedStop: false,
@@ -77,31 +103,71 @@ function buyGold(amount: number) {
   .catch(console.error);
 }
 
-const account = env.default(true);
+function show(epic: string) {
+  ig.get('positions')
+    .then((answer: any) => {
+      // console.log('answer:', answer);
+      answer.positions.forEach((element: any) => {
+        // console.log('element:', element);
+        if (element.market.epic === epic) {
+          console.log(`dealId: ${element.position.dealId}, dealSize: ${element.position.dealSize}`);
+        }
+      });
+    });
+}
+
+function closeAll(epic: string) { // epic € instrument
+  ig.get('positions')
+    .then((answer: any) => {
+      answer.positions.forEach((element: any) => {
+        if (element.market.epic === epic) {
+          const size = element.position.dealSize;
+          const dealId = element.position.dealId;
+          console.log(`dealId: ${dealId}, Size: ${size}`);
+          const data = {
+            dealId,
+            size,
+            // tslint:disable-next-line: object-literal-sort-keys
+            direction: 'SELL',
+            expiry: null,
+            level: null,
+            orderType: 'MARKET',
+            timeInForce: 'FILL_OR_KILL',
+          };
+          ig.delete('positions/otc', 1, data)
+          .then((result: any) => {
+            ig.get(`confirms/${result.dealReference}`, 1)
+            .then((confirmation: any) => {
+              console.log(`status: ${confirmation.status}`);
+              console.log(`reason: ${confirmation.reason}`);
+            })
+            .catch(console.error);
+          })
+          .catch(console.error);
+        }
+      });
+    });
+}
+
+const account = env.default(! argv.live);
 
 const ig = new igApi.default(account.apiKey, account.isDemo);
 
 ig.login(account.username, account.password)
-  // Response data is automatically
-  // passed to the resolve callback
   .then((summary: any) => {
-    // console.log('summary:', summary);
-    console.log(`available: ${summary.accountInfo.available}`);
-    // Once logged in, use the shorthand
-    // get(), post(), put() and delete()
-    // methods to interact with IG's API
+    console.log(`available: ${summary.accountInfo.available} EUR`);
 
-    // buyGold(10.0);
-    sellGold(10.0);
-
-    /*
-    ig.get('positions')
-      .then((positions: any) => {
-        console.log('positions:', positions);
-      });
-      */
+    // buy(instrument.gold,10.0);
+    // show(instrument.gold);
+    // closeAll(instrument.gold);
+    if (action === 'list') {
+      show(argepic);
+    }
+    if (action === 'buy') {
+      buy(argepic, amount);
+    }
+    if (action === 'close') {
+      closeAll(argepic);
+    }
   })
-  // Errors are automatically transformed
-  // into a more user friendly format with
-  // the response status and IG error code
   .catch(console.error);
