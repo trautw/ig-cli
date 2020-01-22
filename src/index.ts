@@ -14,7 +14,7 @@ export function hello(word: string = world): string {
 console.log(hello());
 
 const argv = yargs.options({
-  action: { choices: ['list', 'buy', 'close'], default: 'list' },
+  action: { choices: ['list', 'buy', 'close', 'fullbuy'], default: 'list' },
   count: { type: 'count' },
   instrument: { choices: ['dax', 'gold'], demandOption: true },
   live: { type: 'boolean', default: false },
@@ -154,7 +154,7 @@ const account = env.default(! argv.live);
 const ig = new igApi.default(account.apiKey, account.isDemo);
 
 ig.login(account.username, account.password)
-  .then((summary: any) => {
+  .then(async (summary: any) => {
     console.log(`available: ${summary.accountInfo.available} EUR`);
 
     // buy(instrument.gold,10.0);
@@ -165,6 +165,15 @@ ig.login(account.username, account.password)
     }
     if (action === 'buy') {
       buy(argepic, amount);
+    }
+    if (action === 'fullbuy') {
+      const leverage = 20;
+      const marketAxios = await ig.get(`markets/${argepic}`);
+      const market = marketAxios as any;
+      const epicPrice = market.snapshot.offer;
+      const count = leverage * ( summary.accountInfo.available - 200) / epicPrice;
+      console.log(`Buying ${count} of ${argepic} at ${epicPrice}`);
+      buy(argepic, Number(count.toFixed(2)));
     }
     if (action === 'close') {
       closeAll(argepic);

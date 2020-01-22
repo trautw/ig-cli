@@ -8,9 +8,13 @@
     "list_dax_live": "node dist/index.js --instrument=dax --live=true",
     "list_gold": "node dist/index.js --instrument=gold",
     "buy_10_gold": "node dist/index.js --instrument=gold --action=buy --amount=10",
+    "fullbuy_gold": "node dist/index.js --instrument=gold --action=fullbuy",
+    "fullbuy_gold_live": "node dist/index.js --instrument=gold --action=fullbuy --live=true",
     "close_gold": "node dist/index.js --instrument=gold --action=close",
     "close_dax": "node dist/index.js --instrument=dax --action=close",
     "close_dax_live": "node dist/index.js --instrument=dax --action=close --live=true",
+    "fullbuy_dax": "node dist/index.js --instrument=dax --action=fullbuy",
+    "fullbuy_dax_live": "node dist/index.js --instrument=dax --action=fullbuy --live=true",
     "execute": "node dist/index.js --ships=4"
   },
   "devDependencies": {
