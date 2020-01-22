@@ -171,7 +171,7 @@ ig.login(account.username, account.password)
       const marketAxios = await ig.get(`markets/${argepic}`);
       const market = marketAxios as any;
       const epicPrice = market.snapshot.offer;
-      const count = leverage * ( summary.accountInfo.available - 200) / epicPrice;
+      const count = leverage * (summary.accountInfo.available - 200) / epicPrice;
       console.log(`Buying ${count} of ${argepic} at ${epicPrice}`);
       buy(argepic, Number(count.toFixed(2)));
     }
