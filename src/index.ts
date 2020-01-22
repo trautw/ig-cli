@@ -1,6 +1,5 @@
 // tslint:disable: no-console
 import * as yargs from 'yargs';
-// import { AxiosResponse } from 'axios';
 import * as env from './env';
 import * as igApi from './ig-api';
 import { transformResponse } from './utils';
@@ -55,15 +54,8 @@ function closeGold(size: number) {
     console.log('deleteResult:', deleteResult);
     ig.get(`confirms/${deleteResult.dealReference}`, 1)
     .then((confirmation: any) => {
-      // console.log('confirmation', confirmation);
       console.log(`status: ${confirmation.status}`);
       console.log(`reason: ${confirmation.reason}`);
-      /*
-      ig.get('positions')
-        .then((positions) => {
-          console.log('positions:', positions)
-        })
-      */
     })
     .catch(console.error);
   })
@@ -85,18 +77,10 @@ function buy(epic: string, size: number) {
   };
   ig.post('positions/otc', 2, data)
   .then((order: any) => {
-    // console.log('order:', order);
     ig.get(`confirms/${order.dealReference}`, 1)
       .then((confirmation: any) => {
-        // console.log('confirmation', confirmation);
         console.log(`status: ${confirmation.status}`);
         console.log(`reason: ${confirmation.reason}`);
-        /*
-        ig.get('positions')
-          .then((positions) => {
-            console.log('positions:', positions)
-          })
-        */
       })
       .catch(console.error);
   })
@@ -106,9 +90,7 @@ function buy(epic: string, size: number) {
 function show(epic: string) {
   ig.get('positions')
     .then((answer: any) => {
-      // console.log('answer:', answer);
       answer.positions.forEach((element: any) => {
-        // console.log('element:', element);
         if (element.market.epic === epic) {
           console.log(`dealId: ${element.position.dealId}, dealSize: ${element.position.dealSize}`);
         }
@@ -156,10 +138,6 @@ const ig = new igApi.default(account.apiKey, account.isDemo);
 ig.login(account.username, account.password)
   .then(async (summary: any) => {
     console.log(`available: ${summary.accountInfo.available} EUR`);
-
-    // buy(instrument.gold,10.0);
-    // show(instrument.gold);
-    // closeAll(instrument.gold);
     if (action === 'list') {
       show(argepic);
     }
