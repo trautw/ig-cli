@@ -1,6 +1,7 @@
 {
   "license": "MIT",
   "name": "ig-cli",
+  "bin": "./dist/index.js",
   "scripts": {
     "inst": "yarn install",
     "compile": "npx tsc",
@@ -33,5 +34,5 @@
     "pidcrypt": "nikvdp/pidcrypt",
     "tslint-config-airbnb": "^5.11.2"
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }
