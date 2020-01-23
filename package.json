@@ -1,9 +1,9 @@
 {
   "license": "MIT",
+  "name": "ig-cli",
   "scripts": {
     "inst": "yarn install",
     "compile": "npx tsc",
-    "develop": "npx tsc -w",
     "list_dax": "node dist/index.js --instrument=dax",
     "list_dax_live": "node dist/index.js --instrument=dax --live=true",
     "list_gold": "node dist/index.js --instrument=gold",
@@ -32,5 +32,6 @@
     "ig-api": "^0.15.0",
     "pidcrypt": "nikvdp/pidcrypt",
     "tslint-config-airbnb": "^5.11.2"
-  }
+  },
+  "version": "0.0.1"
 }
