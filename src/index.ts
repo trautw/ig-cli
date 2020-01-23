@@ -62,18 +62,18 @@ function closeGold(size: number) {
   .catch(console.error);
 }
 
-function buy(epic: string, size: number) {
+function buy(epic: string, size: number, stopDistance: number) {
   const data = {
     epic,
     size,
+    stopDistance,
     // tslint:disable-next-line: object-literal-sort-keys
     currencyCode: 'EUR',
     direction: 'BUY',
     expiry: '-',
-    forceOpen: 'true',
-    guaranteedStop: false,
+    forceOpen: true,
+    guaranteedStop: true,
     orderType: 'MARKET',
-    timeInForce: 'FILL_OR_KILL',
   };
   ig.post('positions/otc', 2, data)
   .then((order: any) => {
@@ -142,7 +142,8 @@ ig.login(account.username, account.password)
       show(argepic);
     }
     if (action === 'buy') {
-      buy(argepic, amount);
+      const stopDistance = (summary.accountInfo.available * 0.7) / amount;
+      buy(argepic, amount, stopDistance);
     }
     if (action === 'fullbuy') {
       const leverage = 20;
@@ -151,7 +152,8 @@ ig.login(account.username, account.password)
       const epicPrice = market.snapshot.offer;
       const count = leverage * (summary.accountInfo.available - 200) / epicPrice;
       console.log(`Buying ${count} of ${argepic} at ${epicPrice}`);
-      buy(argepic, Number(count.toFixed(2)));
+      const stopDistance = (summary.accountInfo.available * 0.7) / count;
+      buy(argepic, Number(count.toFixed(2)), stopDistance);
     }
     if (action === 'close') {
       closeAll(argepic);
