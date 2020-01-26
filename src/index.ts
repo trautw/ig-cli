@@ -15,7 +15,7 @@ console.log(hello());
 const argv = yargs.options({
   action: { choices: ['list', 'buy', 'close', 'fullbuy'], default: 'list' },
   count: { type: 'count' },
-  instrument: { choices: ['dax', 'gold'], demandOption: true },
+  instrument: { choices: ['dax', 'gold', 'snp500'], demandOption: true },
   live: { type: 'boolean', default: false },
   n: { type: 'number', alias: 'amount' },
 }).argv;
@@ -27,6 +27,7 @@ const amount = argv.count;
 const instrument = {
   dax: 'IX.D.DAX.IFMM.IP',
   gold: 'CS.D.CFEGOLD.CFE.IP',
+  snp500: 'IX.D.SPTRD.IFE.IP',
 };
 
 let argepic = 'unknown';
@@ -36,6 +37,12 @@ if (instr === 'gold') {
 }
 if (instr === 'dax') {
   argepic = instrument.dax;
+}
+if (instr === 'snp500') {
+  argepic = instrument.snp500;
+}
+if (instr === 'sp500') {
+  argepic = instrument.snp500;
 }
 
 function closeGold(size: number) {
