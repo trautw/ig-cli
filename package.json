@@ -1,13 +1,13 @@
 {
   "name": "ig-cli",
   "description": "A nice gi cli",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "license": "MIT",
   "bin": "./bin/ig-cli",
-  "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.js",
   "files": [
-    "dist/**/*",
+    "lib/**/*",
     "bin/*"
   ],
   "repository": {
@@ -19,21 +19,21 @@
     "url": "https://github.com:trautw/ig-cli/issues"
   },
   "scripts": {
-    "buy_10_gold": "node dist/index.js --instrument=gold --action=buy --amount=10",
-    "close_dax": "node dist/index.js --instrument=dax --action=close",
-    "close_dax_live": "node dist/index.js --instrument=dax --action=close --live=true",
-    "close_gold": "node dist/index.js --instrument=gold --action=close",
-    "close_gold_live": "node dist/index.js --instrument=gold --action=close --live=true",
+    "buy_10_gold": "node lib/index.js --instrument=gold --action=buy --amount=10",
+    "close_dax": "node lib/index.js --instrument=dax --action=close",
+    "close_dax_live": "node lib/index.js --instrument=dax --action=close --live=true",
+    "close_gold": "node lib/index.js --instrument=gold --action=close",
+    "close_gold_live": "node lib/index.js --instrument=gold --action=close --live=true",
     "compile": "npx tsc",
-    "execute": "node dist/index.js --ships=4",
-    "fullbuy_dax": "node dist/index.js --instrument=dax --action=fullbuy",
-    "fullbuy_dax_live": "node dist/index.js --instrument=dax --action=fullbuy --live=true",
-    "fullbuy_gold": "node dist/index.js --instrument=gold --action=fullbuy",
-    "fullbuy_gold_live": "node dist/index.js --instrument=gold --action=fullbuy --live=true",
+    "execute": "node lib/index.js --ships=4",
+    "fullbuy_dax": "node lib/index.js --instrument=dax --action=fullbuy",
+    "fullbuy_dax_live": "node lib/index.js --instrument=dax --action=fullbuy --live=true",
+    "fullbuy_gold": "node lib/index.js --instrument=gold --action=fullbuy",
+    "fullbuy_gold_live": "node lib/index.js --instrument=gold --action=fullbuy --live=true",
     "inst": "yarn install",
-    "list_dax": "node dist/index.js --instrument=dax",
-    "list_dax_live": "node dist/index.js --instrument=dax --live=true",
-    "list_gold": "node dist/index.js --instrument=gold",
+    "list_dax": "node lib/index.js --instrument=dax",
+    "list_dax_live": "node lib/index.js --instrument=dax --live=true",
+    "list_gold": "node lib/index.js --instrument=gold",
     "test": "jest --config jestconfig.json",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
@@ -54,7 +54,8 @@
     "pidcrypt": "nikvdp/pidcrypt",
     "ts-jest": "^25.0.0",
     "tslint-config-airbnb": "^5.11.2",
-    "tslint-config-prettier": "^1.18.0"
+    "tslint-config-prettier": "^1.18.0",
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
     "@types/ramda": "^0.26.39",
@@ -62,7 +63,6 @@
     "jest": "^25.0.0",
     "prettier": "^1.13.2",
     "tslint": "^6.0.0",
-    "typescript": "^3.7.4",
-    "yargs": "^15.1.0"
+    "typescript": "^3.7.4"
   }
 }
