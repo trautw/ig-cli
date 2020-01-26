@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { AxiosInstance } from 'axios';
 import { create, setHeaderTokens } from './axios';
 import {
