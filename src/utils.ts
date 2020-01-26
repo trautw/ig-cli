@@ -11,10 +11,7 @@ import {
 */
 // import 'pidcrypt/rsa';
 import { AxiosResponse } from 'axios';
-import {
-  equals,
-  path,
-} from 'rambda';
+import { equals, path } from 'rambda';
 import error from './error';
 
 // var pidCrypt = i
@@ -25,11 +22,11 @@ const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 // export const isFunction = pipe(type, equals('Function'))
 export function isFunction(f: any): boolean {
-  return typeof(f) === 'function';
+  return typeof f === 'function';
 }
 // export const isUndefined = pipe(type, equals('Undefined'))
 export function isUndefined(f: any): boolean {
-  return typeof(f) === 'undefined';
+  return typeof f === 'undefined';
 }
 
 // Require seedrandom.js first to increase randomness for stronger encryption

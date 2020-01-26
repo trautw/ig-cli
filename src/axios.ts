@@ -17,8 +17,7 @@ export function create(apiKey: string, isDemo: boolean) {
   });
 }
 
-export function setHeaderTokens(instance: AxiosInstance,
-                                response: any) {
+export function setHeaderTokens(instance: AxiosInstance, response: any) {
   instance.defaults.headers['X-SECURITY-TOKEN'] = appToken(response);
   instance.defaults.headers.CST = clientToken(response);
 }

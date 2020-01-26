@@ -1,8 +1,22 @@
 {
   "name": "ig-cli",
-  "version": "0.0.2",
+  "description": "A nice gi cli",
+  "version": "0.0.4",
   "license": "MIT",
   "bin": "./dist/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "files": [
+    "dist/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com:trautw/ig-cli.git"
+  },
+  "homepage": "https://github.com:trautw/ig-cli#readme",
+  "bugs": {
+    "url": "https://github.com:trautw/ig-cli/issues"
+  },
   "scripts": {
     "buy_10_gold": "node dist/index.js --instrument=gold --action=buy --amount=10",
     "close_dax": "node dist/index.js --instrument=dax --action=close",
@@ -18,21 +32,35 @@
     "inst": "yarn install",
     "list_dax": "node dist/index.js --instrument=dax",
     "list_dax_live": "node dist/index.js --instrument=dax --live=true",
-    "list_gold": "node dist/index.js --instrument=gold"
+    "list_gold": "node dist/index.js --instrument=gold",
+    "test": "jest --config jestconfig.json",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test && yarn lint",
+    "preversion": "yarn lint",
+    "version": "yarn format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/jest": "^24.9.1",
     "@types/node": "^13.1.8",
     "axios": "^0.19.1",
     "dotenv": "^8.2.0",
     "ig-api": "^0.15.0",
     "pidcrypt": "nikvdp/pidcrypt",
-    "tslint-config-airbnb": "^5.11.2"
+    "ts-jest": "^25.0.0",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0"
   },
   "devDependencies": {
     "@types/ramda": "^0.26.39",
     "@types/yargs": "^15.0.0",
-    "tslint": "^5.20.1",
+    "jest": "^25.0.0",
+    "prettier": "^1.13.2",
+    "tslint": "^6.0.0",
     "typescript": "^3.7.4",
     "yargs": "^15.1.0"
   }
