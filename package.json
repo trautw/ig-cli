@@ -1,7 +1,7 @@
 {
   "name": "ig-cli",
   "description": "A nice gi cli",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "license": "MIT",
   "bin": "./bin/ig-cli",
   "main": "lib/index.js",
@@ -12,11 +12,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com:trautw/ig-cli.git"
+    "url": "git+https://github.com/trautw/ig-cli.git"
   },
-  "homepage": "https://github.com:trautw/ig-cli#readme",
+  "homepage": "https://github.com/trautw/ig-cli#readme",
   "bugs": {
-    "url": "https://github.com:trautw/ig-cli/issues"
+    "url": "https://github.com/trautw/ig-cli/issues"
   },
   "scripts": {
     "buy_10_gold": "node lib/index.js --instrument=gold --action=buy --amount=10",
