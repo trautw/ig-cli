@@ -59,12 +59,11 @@ function closeGold(size: number) {
   ig.delete('positions/otc', 1, data)
     .then((deleteResult: any) => {
       console.log('deleteResult:', deleteResult);
-      ig.get(`confirms/${deleteResult.dealReference}`, 1)
-        .then((confirmation: any) => {
-          console.log(`status: ${confirmation.status}`);
-          console.log(`reason: ${confirmation.reason}`);
-        })
-        .catch(console.error);
+      return ig.get(`confirms/${deleteResult.dealReference}`, 1);
+    })
+    .then((confirmation: any) => {
+      console.log(`status: ${confirmation.status}`);
+      console.log(`reason: ${confirmation.reason}`);
     })
     .catch(console.error);
 }
