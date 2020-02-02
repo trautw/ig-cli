@@ -1,5 +1,4 @@
-// import { Greeter } from '../index';
+import * as t from '../transaction';
 test('My Greeter', () => {
-  // expect(Greeter('Carl')).toBe('Hello Carl');
-  expect('Carl').toBe('Carl');
+  expect(t.hello()).toBe('Hello 🗺️!');
 });
