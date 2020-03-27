@@ -1,7 +1,7 @@
 {
   "name": "ig-cli",
   "description": "A nice gi cli",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "license": "MIT",
   "bin": "./bin/ig-cli",
   "main": "lib/index.js",

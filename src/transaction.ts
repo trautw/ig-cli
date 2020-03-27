@@ -74,6 +74,7 @@ export class Ig {
 
   public buy(epic: string, size: number, amount: number) {
     const stopDistance = (this.account.accountInfo.available * 0.7) / amount;
+    console.log(`stopDistance: ${stopDistance}`);
     const data = {
       epic,
       size,
