@@ -3,12 +3,6 @@ import * as igApi from './ig-api';
 
 const world = '🗺️';
 
-const instrument = {
-  dax: 'IX.D.DAX.IFMM.IP',
-  gold: 'CS.D.CFEGOLD.CFE.IP',
-  snp500: 'IX.D.SPTRD.IFE.IP',
-};
-
 export function hello(word: string = world): string {
   return `Hello ${world}!`;
 }
@@ -23,31 +17,73 @@ export interface IgCredentials {
 export class Ig {
   private ig: igApi.default;
   private account: any;
-  constructor(account: IgCredentials) {
-    this.account = account;
-    this.ig = new igApi.default(account.apiKey, account.isDemo);
+  credentials: IgCredentials;
+  customer: any;
+  accounts: any;
+  targetAccoutId: string | undefined;
+  constructor(credentials: IgCredentials) {
+    this.credentials = credentials;
+    this.ig = new igApi.default(credentials.apiKey, credentials.isDemo);
   }
 
-  public init() {
+  public async showAccounts() {
     return this.ig
-      .login(this.account.username, this.account.password)
-      .then((acc: any) => {
-        this.account = acc;
-        console.log(`available: ${this.account.accountInfo.available} EUR`);
+      .get('accounts')
+      .then((initialAccounts: any) => {
+        initialAccounts.accounts.forEach((account: any) => {
+          console.log(
+            `accountId: ${account.accountId} available: ${account.balance.available} ${account.currency} ${
+              account.accountName
+            } ${account.preferred ? '*' : ''}`,
+          );
+        });
+      })
+      .catch(() => {
+        console.log('Error getting accounts');
+      });
+  }
+
+  public async init(accountId: string | undefined): Promise<any> {
+    const customer = await this.ig.login(this.credentials.username, this.credentials.password);
+    this.customer = customer;
+    await this.showAccounts();
+
+    console.log(
+      `${customer.currentAccountId}: ${customer.accountType} ${customer.accountInfo.available} ${customer.currencyIsoCode}`,
+    );
+  }
+
+  public async setAccount(accountId: string | undefined) {
+    if (accountId) {
+      if (this.customer.currentAccountId !== accountId) {
+        console.log(`Switching from ${this.customer.currentAccountId} to ${accountId}`);
+        this.targetAccoutId = accountId;
+        return this.ig
+          .put('session', 1, {
+            accountId,
+            defaultAccount: true,
+          })
+          .then(() => {
+            console.log('Account set.');
+          });
+      }
+    }
+  }
+
+  public show(epic: string) {
+    this.ig
+      .get('positions')
+      .then((answer: any) => {
+        answer.positions.forEach((element: any) => {
+          if (element.market.epic === epic) {
+            console.log(`dealId: ${element.position.dealId}, dealSize: ${element.position.dealSize}`);
+          }
+        });
       })
       .catch(console.error);
   }
 
-  public show(epic: string) {
-    this.ig.get('positions').then((answer: any) => {
-      answer.positions.forEach((element: any) => {
-        if (element.market.epic === epic) {
-          console.log(`dealId: ${element.position.dealId}, dealSize: ${element.position.dealSize}`);
-        }
-      });
-    });
-  }
-
+  /*
   public closeGold(size: number) {
     const data = {
       direction: 'SELL',
@@ -71,29 +107,30 @@ export class Ig {
       })
       .catch(console.error);
   }
+  */
 
-  public buy(epic: string, size: number, amount: number) {
-    const stopDistance = (this.account.accountInfo.available * 0.7) / amount;
+  public buy(epic: string, size: number, amount: number, call: boolean) {
+    console.log(this.account);
+    const stopDistance = (this.customer.accountInfo.balance * 0.7) / amount;
     console.log(`stopDistance: ${stopDistance}`);
     const data = {
       epic,
       size,
       stopDistance,
       currencyCode: 'EUR',
-      direction: 'BUY',
+      direction: call ? 'BUY' : 'SELL',
       expiry: '-',
       forceOpen: true,
       guaranteedStop: true,
       orderType: 'MARKET',
     };
-    this.ig
+    return this.ig
       .post('positions/otc', 2, data)
       .then((order: any) => {
-        return this.ig.get(`confirms/${order.dealReference}`, 1);
-      })
-      .then((confirmation: any) => {
-        console.log(`status: ${confirmation.status}`);
-        console.log(`reason: ${confirmation.reason}`);
+        this.ig.get(`confirms/${order.dealReference}`, 1).then((confirmation: any) => {
+          console.log(`status: ${confirmation.status}`);
+          console.log(`reason: ${confirmation.reason}`);
+        });
       })
       .catch(console.error);
   }
@@ -130,16 +167,17 @@ export class Ig {
     });
   }
 
-  public fullbuy(epic: string) {
+  public fullbuy(epic: string, call: boolean) {
     const leverage = 20;
     this.ig
       .get(`markets/${epic}`)
       .then((marketAxios: any) => {
         const market = marketAxios as any;
         const epicPrice = market.snapshot.offer;
-        const count = (leverage * (this.account.accountInfo.available - 200)) / epicPrice;
+        // TODO: use right account
+        const count = (leverage * (this.customer.accountInfo.balance - 200)) / epicPrice;
         console.log(`Buying ${count} of ${epic} at ${epicPrice}`);
-        this.buy(epic, Number(count.toFixed(2)), count);
+        this.buy(epic, Number(count.toFixed(2)), count, call);
       })
       .catch(console.error);
   }

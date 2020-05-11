@@ -1,7 +1,7 @@
 {
   "name": "ig-cli",
   "description": "A nice gi cli",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "license": "MIT",
   "bin": "./bin/ig-cli",
   "main": "lib/index.js",
@@ -38,7 +38,7 @@
     "dotenv": "^8.2.0",
     "ig-api": "^0.15.0",
     "pidcrypt": "nikvdp/pidcrypt",
-    "yargs": "^15.1.0"
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@types/jest": "^24.9.1",
@@ -47,7 +47,7 @@
     "jest": "^25.0.0",
     "prettier": "^1.13.2",
     "ts-jest": "^25.0.0",
-    "tslint": "^6.0.0",
+    "tslint": "^6.1.2",
     "tslint-config-airbnb": "^5.11.2",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.4"
