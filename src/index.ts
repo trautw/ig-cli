@@ -13,9 +13,13 @@ import * as t from './transaction';
 console.log(t.hello());
 
 const argv = yargs.options({
-  action: { choices: ['list', 'buy', 'close', 'fullbuy', 'setaccount'], default: 'list', demandOption: true },
+  action: {
+    choices: ['list', 'buy', 'close', 'fullbuy', 'fullsell', 'setaccount'],
+    default: 'list',
+    demandOption: true,
+  },
   count: { type: 'count' },
-  instrument: { choices: ['dax', 'gold', 'snp500', 'gbpusd'] },
+  instrument: { choices: ['dax', 'gold', 'snp500', 'gbpusd', 'bund'] },
   live: { type: 'boolean', default: false },
   call: { type: 'boolean', default: true },
   accountid: { type: 'string' },
@@ -32,6 +36,7 @@ const instrument = {
   gold: 'CS.D.CFEGOLD.CFE.IP',
   snp500: 'IX.D.SPTRD.IFE.IP',
   gbpusd: 'CS.D.GBPUSD.MINI.IP',
+  bund: 'CC.D.FGBL.UME.IP',
 };
 
 let argepic = 'unknown';
@@ -50,6 +55,9 @@ if (instr === 'sp500') {
 }
 if (instr === 'gbpusd') {
   argepic = instrument.gbpusd;
+}
+if (instr === 'bund') {
+  argepic = instrument.bund;
 }
 
 const param = env.default(!argv.live);
@@ -78,5 +86,8 @@ theBank.init(account.accountId).then(() => {
   }
   if (action === 'fullbuy') {
     theBank.fullbuy(argepic, call);
+  }
+  if (action === 'fullsell') {
+    theBank.fullbuy(argepic, false);
   }
 });

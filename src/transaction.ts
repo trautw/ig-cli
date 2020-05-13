@@ -83,32 +83,6 @@ export class Ig {
       .catch(console.error);
   }
 
-  /*
-  public closeGold(size: number) {
-    const data = {
-      direction: 'SELL',
-      epic: instrument.gold, // 'CS.D.CFEGOLD.CFE.IP', // Gold
-      expiry: '-',
-      level: null,
-      orderType: 'MARKET',
-      quoteId: null,
-      size: size.toString(),
-      timeInForce: 'FILL_OR_KILL',
-    };
-    this.ig
-      .delete('positions/otc', 1, data)
-      .then((deleteResult: any) => {
-        console.log('deleteResult:', deleteResult);
-        return this.ig.get(`confirms/${deleteResult.dealReference}`, 1);
-      })
-      .then((confirmation: any) => {
-        console.log(`status: ${confirmation.status}`);
-        console.log(`reason: ${confirmation.reason}`);
-      })
-      .catch(console.error);
-  }
-  */
-
   public buy(epic: string, size: number, amount: number, call: boolean) {
     console.log(this.account);
     const stopDistance = (this.customer.accountInfo.balance * 0.7) / amount;
