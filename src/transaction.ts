@@ -125,11 +125,12 @@ export class Ig {
         if (element.market.epic === instrument.epic) {
           const size = element.position.dealSize;
           const dealId = element.position.dealId;
+          const direction = element.position.direction === 'SELL' ? 'BUY' : 'SELL';
           console.log(`dealId: ${dealId}, Size: ${size}`);
           const data = {
             dealId,
             size,
-            direction: 'SELL',
+            direction,
             expiry: null,
             level: null,
             orderType: 'MARKET',
