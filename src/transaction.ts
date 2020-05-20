@@ -7,6 +7,12 @@ export function hello(word: string = world): string {
   return `Hello ${world}!`;
 }
 
+export interface Instrument {
+  epic: string;
+  currency: string;
+  leverage: number;
+}
+
 export interface IgCredentials {
   username: string;
   password: string;
@@ -70,34 +76,38 @@ export class Ig {
     }
   }
 
-  public show(epic: string) {
+  public show(instrument: Instrument) {
     this.ig
       .get('positions')
       .then((answer: any) => {
         answer.positions.forEach((element: any) => {
-          if (element.market.epic === epic) {
-            console.log(`dealId: ${element.position.dealId}, dealSize: ${element.position.dealSize}`);
+          if (element.market.epic === instrument.epic) {
+            console.log(
+              `dealId: ${element.position.dealId}, dealSize: ${element.position.dealSize}, instrument: ${element.market.instrumentName}`,
+            );
           }
         });
       })
       .catch(console.error);
   }
 
-  public buy(epic: string, size: number, amount: number, call: boolean) {
-    console.log(this.account);
+  public buy(instrument: Instrument, size: number, amount: number, call: boolean) {
+    console.log(`Size: ${size}`);
     const stopDistance = (this.customer.accountInfo.balance * 0.7) / amount;
     console.log(`stopDistance: ${stopDistance}`);
     const data = {
-      epic,
+      epic: instrument.epic,
       size,
       stopDistance,
-      currencyCode: 'EUR',
+      // stopLevel: 0.6,
+      currencyCode: instrument.currency,
       direction: call ? 'BUY' : 'SELL',
       expiry: '-',
       forceOpen: true,
       guaranteedStop: true,
       orderType: 'MARKET',
     };
+    console.log(data);
     return this.ig
       .post('positions/otc', 2, data)
       .then((order: any) => {
@@ -109,11 +119,10 @@ export class Ig {
       .catch(console.error);
   }
 
-  public closeAll(epic: string) {
-    // epic € instrument
+  public closeAll(instrument: Instrument) {
     this.ig.get('positions').then((answer: any) => {
       answer.positions.forEach((element: any) => {
-        if (element.market.epic === epic) {
+        if (element.market.epic === instrument.epic) {
           const size = element.position.dealSize;
           const dealId = element.position.dealId;
           console.log(`dealId: ${dealId}, Size: ${size}`);
@@ -141,17 +150,15 @@ export class Ig {
     });
   }
 
-  public fullbuy(epic: string, call: boolean) {
-    const leverage = 20;
+  public fullbuy(instrument: Instrument, call: boolean) {
     this.ig
-      .get(`markets/${epic}`)
+      .get(`markets/${instrument.epic}`)
       .then((marketAxios: any) => {
         const market = marketAxios as any;
         const epicPrice = market.snapshot.offer;
-        // TODO: use right account
-        const count = (leverage * (this.customer.accountInfo.balance - 200)) / epicPrice;
-        console.log(`Buying ${count} of ${epic} at ${epicPrice}`);
-        this.buy(epic, Number(count.toFixed(2)), count, call);
+        const count = (instrument.leverage * (this.customer.accountInfo.balance - 200)) / epicPrice;
+        console.log(`${call ? 'Buying' : 'Selling'} ${count} of ${instrument.epic} at ${epicPrice}`);
+        this.buy(instrument, Number(count.toFixed(2)), count, call);
       })
       .catch(console.error);
   }

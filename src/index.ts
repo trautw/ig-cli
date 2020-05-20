@@ -31,33 +31,33 @@ const action = argv.action;
 const amount = argv.count;
 const call = argv.call;
 
-const instrument = {
-  dax: 'IX.D.DAX.IFMM.IP',
-  gold: 'CS.D.CFEGOLD.CFE.IP',
-  snp500: 'IX.D.SPTRD.IFE.IP',
-  gbpusd: 'CS.D.GBPUSD.MINI.IP',
-  bund: 'CC.D.FGBL.UME.IP',
+const instruments = {
+  dax: { epic: 'IX.D.DAX.IFMM.IP', currency: 'EUR', leverage: 20 },
+  gold: { epic: 'CS.D.CFEGOLD.CFE.IP', currency: 'EUR', leverage: 20 },
+  snp500: { epic: 'IX.D.SPTRD.IFE.IP', currency: 'EUR', leverage: 20 },
+  gbpusd: { epic: 'CS.D.GBPUSD.MINI.IP', currency: 'USD', leverage: 1 / 300 },
+  bund: { epic: 'CC.D.FGBL.UME.IP', currency: 'EUR', leverage: 20 },
 };
 
-let argepic = 'unknown';
+let instrument: t.Instrument = { epic: 'unknown', currency: 'unknown', leverage: NaN };
 
 if (instr === 'gold') {
-  argepic = instrument.gold;
+  instrument = instruments.gold;
 }
 if (instr === 'dax') {
-  argepic = instrument.dax;
+  instrument = instruments.dax;
 }
 if (instr === 'snp500') {
-  argepic = instrument.snp500;
+  instrument = instruments.snp500;
 }
 if (instr === 'sp500') {
-  argepic = instrument.snp500;
+  instrument = instruments.snp500;
 }
 if (instr === 'gbpusd') {
-  argepic = instrument.gbpusd;
+  instrument = instruments.gbpusd;
 }
 if (instr === 'bund') {
-  argepic = instrument.bund;
+  instrument = instruments.bund;
 }
 
 const param = env.default(!argv.live);
@@ -73,21 +73,21 @@ const account = {
 const theBank = new t.Ig(account);
 theBank.init(account.accountId).then(() => {
   if (action === 'list') {
-    theBank.show(argepic);
+    theBank.show(instrument);
   }
   if (action === 'buy') {
-    theBank.buy(argepic, amount, amount, call);
+    theBank.buy(instrument, amount, amount, call);
   }
   if (action === 'close') {
-    theBank.closeAll(argepic);
+    theBank.closeAll(instrument);
   }
   if (action === 'setaccount') {
     theBank.setAccount(account.accountId);
   }
   if (action === 'fullbuy') {
-    theBank.fullbuy(argepic, call);
+    theBank.fullbuy(instrument, call);
   }
   if (action === 'fullsell') {
-    theBank.fullbuy(argepic, false);
+    theBank.fullbuy(instrument, false);
   }
 });
