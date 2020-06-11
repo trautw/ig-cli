@@ -19,6 +19,7 @@ const argv = yargs.options({
     demandOption: true,
   },
   count: { type: 'count' },
+  percent: { type: 'number', default: 100 },
   instrument: { choices: ['dax', 'gold', 'snp500', 'gbpusd', 'bund'] },
   live: { type: 'boolean', default: false },
   call: { type: 'boolean', default: true },
@@ -30,6 +31,7 @@ const instr = argv.instrument;
 const action = argv.action;
 const amount = argv.count;
 const call = argv.call;
+const percent = argv.percent;
 
 const instruments = {
   dax: { epic: 'IX.D.DAX.IFMM.IP', currency: 'EUR', leverage: 20 },
@@ -85,9 +87,9 @@ theBank.init(account.accountId).then(() => {
     theBank.setAccount(account.accountId);
   }
   if (action === 'fullbuy') {
-    theBank.fullbuy(instrument, call);
+    theBank.fullbuy(instrument, call, percent);
   }
   if (action === 'fullsell') {
-    theBank.fullbuy(instrument, false);
+    theBank.fullbuy(instrument, false, percent);
   }
 });

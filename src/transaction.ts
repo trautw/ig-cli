@@ -151,13 +151,13 @@ export class Ig {
     });
   }
 
-  public fullbuy(instrument: Instrument, call: boolean) {
+  public fullbuy(instrument: Instrument, call: boolean, percent: number) {
     this.ig
       .get(`markets/${instrument.epic}`)
       .then((marketAxios: any) => {
         const market = marketAxios as any;
         const epicPrice = market.snapshot.offer;
-        const count = (instrument.leverage * (this.customer.accountInfo.balance - 200)) / epicPrice;
+        const count = ((instrument.leverage * (this.customer.accountInfo.balance - 200)) / epicPrice) * (percent / 100);
         console.log(`${call ? 'Buying' : 'Selling'} ${count} of ${instrument.epic} at ${epicPrice}`);
         this.buy(instrument, Number(count.toFixed(2)), count, call);
       })
