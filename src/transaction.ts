@@ -112,11 +112,37 @@ export class Ig {
       .post('positions/otc', 2, data)
       .then((order: any) => {
         this.ig.get(`confirms/${order.dealReference}`, 1).then((confirmation: any) => {
-          console.log(`status: ${confirmation.status}`);
-          console.log(`reason: ${confirmation.reason}`);
+          console.log(confirmation);
         });
       })
       .catch(console.error);
+  }
+
+  public closePosition(positionId: string) {
+    this.ig.get(`positions/${positionId}`).then((answer: any) => {
+      const size = answer.position.dealSize;
+      const dealId = answer.position.dealId;
+      const direction = answer.position.direction === 'SELL' ? 'BUY' : 'SELL';
+      console.log(`dealId: ${dealId}, Size: ${size}`);
+      const data = {
+        dealId,
+        size,
+        direction,
+        expiry: null,
+        level: null,
+        orderType: 'MARKET',
+        timeInForce: 'FILL_OR_KILL',
+      };
+      this.ig
+        .delete('positions/otc', 1, data)
+        .then((result: any) => {
+          return this.ig.get(`confirms/${result.dealReference}`, 1);
+        })
+        .then((confirmation: any) => {
+          console.log(confirmation);
+        })
+        .catch(console.error);
+    });
   }
 
   public closeAll(instrument: Instrument) {
@@ -142,8 +168,7 @@ export class Ig {
               return this.ig.get(`confirms/${result.dealReference}`, 1);
             })
             .then((confirmation: any) => {
-              console.log(`status: ${confirmation.status}`);
-              console.log(`reason: ${confirmation.reason}`);
+              console.log(confirmation);
             })
             .catch(console.error);
         }

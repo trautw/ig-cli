@@ -14,7 +14,7 @@ console.log(t.hello());
 
 const argv = yargs.options({
   action: {
-    choices: ['list', 'buy', 'close', 'fullbuy', 'fullsell', 'setaccount'],
+    choices: ['list', 'buy', 'close', 'closeposition', 'fullbuy', 'fullsell', 'setaccount'],
     default: 'list',
     demandOption: true,
   },
@@ -24,6 +24,7 @@ const argv = yargs.options({
   live: { type: 'boolean', default: false },
   call: { type: 'boolean', default: true },
   accountid: { type: 'string' },
+  position: { type: 'string' },
   n: { type: 'number', alias: 'amount' },
 }).argv;
 
@@ -31,6 +32,7 @@ const instr = argv.instrument;
 const action = argv.action;
 const amount = argv.count;
 const call = argv.call;
+const position = argv.position;
 const percent = argv.percent;
 
 const instruments = {
@@ -79,6 +81,9 @@ theBank.init(account.accountId).then(() => {
   }
   if (action === 'buy') {
     theBank.buy(instrument, amount, amount, call);
+  }
+  if (action === 'closeposition') {
+    theBank.closePosition(position as string);
   }
   if (action === 'close') {
     theBank.closeAll(instrument);
