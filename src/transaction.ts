@@ -112,7 +112,7 @@ export class Ig {
       .post('positions/otc', 2, data)
       .then((order: any) => {
         this.ig.get(`confirms/${order.dealReference}`, 1).then((confirmation: any) => {
-          console.log(confirmation);
+          console.log(JSON.stringify(confirmation, null, 2));
         });
       })
       .catch(console.error);
@@ -139,7 +139,7 @@ export class Ig {
           return this.ig.get(`confirms/${result.dealReference}`, 1);
         })
         .then((confirmation: any) => {
-          console.log(confirmation);
+          console.log(JSON.stringify(confirmation, null, 2));
         })
         .catch(console.error);
     });
@@ -168,7 +168,7 @@ export class Ig {
               return this.ig.get(`confirms/${result.dealReference}`, 1);
             })
             .then((confirmation: any) => {
-              console.log(confirmation);
+              console.log(JSON.stringify(confirmation, null, 2));
             })
             .catch(console.error);
         }
