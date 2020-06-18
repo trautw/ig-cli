@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { AxiosInstance } from 'axios';
+import * as axios from 'axios';
 import { create, setHeaderTokens } from './axios';
 import {
   getOption,
@@ -10,11 +10,34 @@ import {
   uniqueId,
 } from './utils';
 
+export interface HttpMethod {
+  method:
+    | 'delete'
+    | 'post'
+    | 'get'
+    | 'GET'
+    | 'DELETE'
+    | 'head'
+    | 'HEAD'
+    | 'options'
+    | 'OPTIONS'
+    | 'POST'
+    | 'put'
+    | 'PUT'
+    | 'patch'
+    | 'PATCH'
+    | 'link'
+    | 'LINK'
+    | 'unlink'
+    | 'UNLINK'
+    | undefined;
+}
+
 export default class IG {
   private static transformResponse = transformResponse;
   private static transformError = transformError;
   private static uniqueId = uniqueId;
-  private api: AxiosInstance;
+  private api: axios.AxiosInstance;
   private defaults: any;
 
   constructor(apiKey: string, isDemo: boolean, options?: any) {
@@ -32,7 +55,30 @@ export default class IG {
     const transformRes = getOption('transformResponse', options, this.defaults);
     const transformErr = getOption('transformError', options, this.defaults);
     const headers = { Version: version || 1, _method: method };
-    let realmethod = method;
+
+    let realmethod:
+      | 'delete'
+      | 'post'
+      | 'get'
+      | 'GET'
+      | 'DELETE'
+      | 'head'
+      | 'HEAD'
+      | 'options'
+      | 'OPTIONS'
+      | 'POST'
+      | 'put'
+      | 'PUT'
+      | 'patch'
+      | 'PATCH'
+      | 'link'
+      | 'LINK'
+      | 'unlink'
+      | 'UNLINK'
+      | undefined = 'get';
+    if (method.valueOf() === 'post'.valueOf()) {
+      realmethod = 'post';
+    }
     if (method.valueOf() === 'delete'.valueOf()) {
       realmethod = 'post';
       headers._method = 'delete';
