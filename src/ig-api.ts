@@ -76,6 +76,9 @@ export default class IG {
       | 'unlink'
       | 'UNLINK'
       | undefined = 'get';
+    if (method.valueOf() === 'put'.valueOf()) {
+      realmethod = 'put';
+    }
     if (method.valueOf() === 'post'.valueOf()) {
       realmethod = 'post';
     }
@@ -83,6 +86,8 @@ export default class IG {
       realmethod = 'post';
       headers._method = 'delete';
     }
+    // tslint:disable-next-line: no-console
+    console.log(`realmethod = ${realmethod}`);
 
     let request = this.api.request(
       Object.assign({}, config, {
