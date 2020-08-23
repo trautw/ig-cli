@@ -93,7 +93,7 @@ export class Ig {
 
   public buy(instrument: Instrument, size: number, amount: number, call: boolean) {
     console.log(`Size: ${size}`);
-    const stopDistance = (this.customer.accountInfo.balance * 0.7) / amount;
+    const stopDistance = (this.customer.accountInfo.available * 0.7) / amount;
     console.log(`stopDistance: ${stopDistance}`);
     const data = {
       epic: instrument.epic,
@@ -182,7 +182,8 @@ export class Ig {
       .then((marketAxios: any) => {
         const market = marketAxios as any;
         const epicPrice = market.snapshot.offer;
-        const count = ((instrument.leverage * (this.customer.accountInfo.balance - 200)) / epicPrice) * (percent / 100);
+        const count =
+          ((instrument.leverage * (this.customer.accountInfo.available - 200)) / epicPrice) * (percent / 100);
         console.log(`${call ? 'Buying' : 'Selling'} ${count} of ${instrument.epic} at ${epicPrice}`);
         this.buy(instrument, Number(count.toFixed(2)), count, call);
       })
